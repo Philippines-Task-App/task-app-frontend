@@ -4,29 +4,29 @@
     import ArrowRight from '@lucide/svelte/icons/arrow-right';
 	import SearchIcon from '@lucide/svelte/icons/search';
 	import ChevronDown from '@lucide/svelte/icons/chevron-down'; 
+	import type { PageData } from './$types'; 
+	import type { TaskCategory as TaskCategories } from '$lib/types';
 
+	let { data }: { data: PageData } = $props();
 	let selectedCategory = $state<string[]>([]);
 	let location = $state('');
 
-	interface Category {
+	interface ComboBoxCategory {
 		label: string;
 		value: string;
-		// emoji?: string; // Optional: as shown in Skeleton docs
 	}
 
-	const taskCategories: Category[] = [
-		{ label: 'Cleaning', value: 'cleaning' },
-		{ label: 'Home Repairs', value: 'repairs' },
-		{ label: 'Moving & Delivery', value: 'moving' },
-		{ label: 'Errands & Shopping', value: 'errands' },
-		{ label: 'Painting', value: 'painting'},
-		{ label: 'Tech Support', value: 'tech'}
-	];
+	const comboBoxCategories = $derived<ComboBoxCategory[]>(
+		(data.taskCategories || []).map((backendCategory: TaskCategories) => ({
+			label: backendCategory.name,
+			value: backendCategory.slug 
+		}))
+	);
 
 	function handleCategoryChange(event: { value: string[] }) {
 		selectedCategory = event.value;
 		if (selectedCategory.length > 0) {
-			console.log('Selected category:', taskCategories.find(cat => cat.value === selectedCategory[0])?.label);
+			console.log('Selected category:', comboBoxCategories.find(cat => cat.value === selectedCategory[0])?.label);
 		} else {
 			console.log('No category selected');
 		}
@@ -46,7 +46,7 @@
 		<div class="card preset-tonal-surface p-6 md:p-8 space-y-6">
 			<div>
 				<Combobox
-					data={taskCategories}
+					data={comboBoxCategories}
 					bind:value={selectedCategory}
 					onValueChange={handleCategoryChange}
 					placeholder="Select a category (e.g., Cleaning)"
@@ -62,7 +62,7 @@
 				</Combobox>
 				{#if selectedCategory.length > 0}
 					<p class="text-sm text-left mt-2 text-surface-600-400">
-						Selected: {taskCategories.find(cat => cat.value === selectedCategory[0])?.label}
+						Selected: {comboBoxCategories.find(cat => cat.value === selectedCategory[0])?.label}
 					</p>
 				{/if}
 			</div>

@@ -1,24 +1,12 @@
 <script lang="ts">
 	import { Avatar } from '@skeletonlabs/skeleton-svelte';
     import { Combobox } from '@skeletonlabs/skeleton-svelte';
-	import { Switch } from '@skeletonlabs/skeleton-svelte';
     import ArrowRight from '@lucide/svelte/icons/arrow-right';
-	import IconMoon from '@lucide/svelte/icons/moon';
-	import IconSun from '@lucide/svelte/icons/sun';
+	import SearchIcon from '@lucide/svelte/icons/search';
+	import ChevronDown from '@lucide/svelte/icons/chevron-down'; 
 
 	let selectedCategory = $state<string[]>([]);
 	let location = $state('');
-
-	// Bind to the checked state
-	let mode = $state(false);
-
-	// Handle the change in state when toggled.
-	function handleModeChange(checked: boolean) {
-		// NOTE: implementation may differ per Tailwind config and framework:
-		// https://tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually
-		console.log({ mode });
-		mode = checked;
-	}
 
 	interface Category {
 		label: string;
@@ -49,15 +37,7 @@
 	<title>TaskBuddy - Find Help with your tasks in Metro Manila</title>
 </svelte:head>
 
-<div class="relative p-4 md:p-10 text-center min-h-screen
-            bg-surface-100 dark:bg-surface-900
-            transition-colors duration-300 ease-in-out">
-
-	<!-- Light/Dark Mode Toggle Button -->
-	<Switch name="mode" controlActive="bg-surface-200" checked={mode} onCheckedChange={(e) => handleModeChange(e.checked)}>
-		{#snippet inactiveChild()}<IconMoon size="14" />{/snippet}
-		{#snippet activeChild()}<IconSun size="14" />{/snippet}
-	</Switch>
+<div class="p-4 md:p-10 text-center">
 
 	<!-- Submit Task Section -->
 	<section class="max-w-2xl mx-auto space-y-8">
@@ -81,7 +61,7 @@
 					{/snippet}
 				</Combobox>
 				{#if selectedCategory.length > 0}
-					<p class="text-sm text-left mt-2 text-surface-600 dark:text-surface-300">
+					<p class="text-sm text-left mt-2 text-surface-600-400">
 						Selected: {taskCategories.find(cat => cat.value === selectedCategory[0])?.label}
 					</p>
 				{/if}

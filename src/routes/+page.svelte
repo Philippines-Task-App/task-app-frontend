@@ -45,6 +45,10 @@
 
 		<div class="card preset-tonal-surface p-6 md:p-8 space-y-6">
 			<div>
+
+				<div class="text-sm text-right mb-1">
+					<a href="/categories">Browse All Categories</a>
+				</div>
 				<Combobox
 					data={comboBoxCategories}
 					bind:value={selectedCategory}
